@@ -28,6 +28,10 @@ Mail.defaults do
                   enable_starttls_auto: true)
 end
 
+#each mail action is executed in turn by calling the process method
+#if a process method returns true, no more actions are executed for 
+#the current email.
+#
 mail_actions = []
 
 load "dummy_action.rb"
