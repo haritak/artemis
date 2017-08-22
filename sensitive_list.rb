@@ -1,43 +1,11 @@
 SENSITIVELIST = "1epal-moiron-sensitive-emails"
 
-require 'http'
-require 'json'
-require 'uri'
 
-SKIP_SMSES = true
 
 class MonitorSensitiveList < Dummy_Action
 
   def initialize
-    #acquire api key
-    url = "https://easysms.gr/api/key/get?"+
-      URI.encode_www_form("username"=>SMS_USERNAME,
-                          "password"=>SMS_PASSWORD,
-                          "type"=>"json")
-    resp = HTTP.get url
-    rj = JSON.parse resp.body
-
-    if rj["error"] != "0" 
-      puts "Failed to get sms api key"
-      puts resp.body
-      @balance = 0
-      return
-    end
-
-    @api_key = rj["key"]
-    if not @api_key
-      puts "Failed to obtain api_key"
-      @balance = 0
-      return
-    end
-
-    #get balance
-    #
-    resp = HTTP.get "https://easysms.gr/api/balance/get?"+
-      URI.encode_www_form("key"=>@api_key,"type"=>"json")
-    rj = JSON.parse resp.body
-    @balance = rj["balance"].to_i
-    puts resp.body
+    @balance = Artemis::get_sms_balance
   end
 
   def describe
@@ -45,7 +13,8 @@ class MonitorSensitiveList < Dummy_Action
   end
 
   def process(m)
-    super
+    first_pass = super
+    return STOP_PROCESSING if first_pass == STOP_PROCESSING
     return CONTINUE unless @sender.include?(SENSITIVELIST)
 
     puts "SENSITIVE!"
@@ -53,7 +22,7 @@ class MonitorSensitiveList < Dummy_Action
     #inform through smses
     if @balance > 100 and not SKIP_SMSES
       SENSITIVE_SMS_RECIPIENTS.each do |tel|
-        send_sms(tel, "Γειά !")
+        Artemis::send_sms(tel, "Γειά !")
       end
     else
       puts "Skipping smses or balance(#{@balance}) not enough or other error."
@@ -67,14 +36,5 @@ class MonitorSensitiveList < Dummy_Action
   end
 
   private 
-
-  def send_sms(tel, msg)
-    url = "https://easysms.gr/api/sms/send?"+
-    URI.encode_www_form("key"=>@api_key, "from"=>"Artemis", "to"=>tel, "text"=>msg, "type"=>"json")
-    resp = HTTP.get url
-    rj = JSON.parse resp.body
-    @balance = rj["balance"].to_i
-    puts "New balance is #{@balance}"
-  end
 
 end

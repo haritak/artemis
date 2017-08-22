@@ -4,13 +4,60 @@ class ScheduleBaseAction < Dummy_Action
   def describe
     "Schedule Base Action"
   end
-  def process(m)
-    super
-    @fromSchedulers = SCHEDULERS.map{ |s| @sender.include?( s )}.include?(true)
-    @aboutSchedule = ( @about =~ /.*ρολ.γιο.*ρ.γραμ.*/ )
-    @aboutEfimeries = ( @about =~ /.*φημερ.ε.*/ )
 
-    notFoundFiles = [
+  def process(m)
+    first_pass = super
+    return STOP_PROCESSING if first_pass == STOP_PROCESSING 
+
+    @fromSchedulers = SCHEDULERS.map{ |s| @sender.include?( s )}.include?(true)
+    @aboutSchedule = ( @subject =~ /.*ρολ.γιο.*ρ.γραμ.*/ )
+    @aboutEfimeries = ( @subject =~ /.*φημερ.ε.*/ )
+
+    @attachments = []
+    m.attachments.each do |a|
+      @attachments << a.filename
+    end
+
+    find_required_schedule_files(m)
+    p @foundScheduleFiles
+    p @notFoundScheduleFiles
+
+    find_required_efimeries_files(m)
+    p @foundEfimeriesFiles
+    p @notFoundEfimeriesFiles
+
+    if @fromSchedulers
+
+      notFoundList = []
+      notFoundList = @notFoundScheduleFiles if @aboutSchedule and @notFoundScheduleFiles.length>0
+      notFoundList = @notFoundEfimeriesFiles if @aboutEfimeries and @notFoundEfimeriesFiles.length>0
+
+      if notFoundList.length>0
+        warning = 
+          "<p>Λείπουν τα αρχεία:</p>" +
+          "<ul>" +
+          "<li>#{notFoundList.join('</li><li>')}</li>"+
+          "</ul>"+
+          "<p><strong>Ξαναστείλτε το email συμπεριλαμβάνοντας τα παραπάνω αρχεία.</strong></p>"
+        Artemis::send_warning_email(m, ['charitakis.ioannis@gmail.com'], warning) #TODO should inform everyone SCHEDULERS
+
+        return STOP_PROCESSING
+      end
+    end
+
+    puts "Done processing email:"
+    puts @fromSchedulers
+    puts @aboutSchedule
+    puts @aboutEfimeries
+    p @attachments
+
+    return CONTINUE
+  end
+
+  private
+
+  def find_required_schedule_files(m)
+    @notFoundScheduleFiles = [
       "EXCEL.xls",
       "TEACHERS.pdf",
       "TEACHERS_DETAILED.pdf",
@@ -19,19 +66,40 @@ class ScheduleBaseAction < Dummy_Action
       "ROOMS.pdf",
       "ROOMS_DETAILED.pdf",
       "KATANOMI.xls",
-      "roz file (AscTimetables file)"]
+      "roz"]
 
-    @attachments = []
-    m.attachments.each do |a|
-      @attachments << a.filename
+    @foundScheduleFiles = @notFoundScheduleFiles.select { |fn| @attachments.include?( fn ) }
+    @notFoundScheduleFiles = @notFoundScheduleFiles - @foundScheduleFiles
+    rozFile = @attachments.select { |fn| fn =~ /.*\.roz/ }
+    if rozFile and rozFile.length>0 
+      @notFoundScheduleFiles -= ["roz"]
+      @foundScheduleFiles << rozFile[0]
     end
-    
 
-    puts @fromSchedulers
-    puts @aboutSchedule
-    puts @aboutEfimeries
-    p @attachments
-
-    return CONTINUE
+    if @foundScheduleFiles.length>6 and not @aboutSchedule
+      puts "Warning! This seems to be an email about schedule."
+      puts "However, it was not detected as such."
+      puts "This is it's subject: #{@subject}"
+      @aboutSchedule = true
+    end
   end
+
+  def find_required_efimeries_files(m)
+    @notFoundEfimeriesFiles = ["efimeries.ods"]
+    @foundEfimeriesFiles = []
+    @notFoundEfimeriesFiles.each do |f|
+      if @attachments.include?(f)
+        @foundEfimeriesFiles << f
+      end
+    end
+    @notFoundEfimeriesFiles -= @foundEfimeriesFiles
+
+    if @foundEfimeriesFiles.length==1 and not @aboutEfimeries
+      puts "Warning! This seems to be an email about efimeries."
+      puts "However, it was not detected as such."
+      puts "This is it's subject: #{@subject}"
+      @aboutEfimeries = true
+    end
+  end
+
 end
