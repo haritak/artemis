@@ -73,14 +73,17 @@ class Artemis
     end
   end
 
-  def self.send_warning_email(trigering_email, recipients, text)
-
-
+  def self.send_warning_email(trigering_email, recipients, text, attachments=nil)
     Mail.deliver do
       charset = "UTF-8"
       content_transfer_encoding="8bit"
       from "Άρτεμις <#{ME}>"
       to recipients.join(",")
+      if attachments
+        attachments.each do |f|
+          add_file f
+        end
+      end
       now = DateTime.now
       subject "Ενημέρωση #{now.day}/#{now.month}/#{now.year} #{now.hour}:#{now.minute}.#{now.second}"
       html_part do
