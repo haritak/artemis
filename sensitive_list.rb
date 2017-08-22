@@ -41,13 +41,12 @@ class MonitorSensitiveList < Dummy_Action
   end
 
   def describe
-    puts "MonitorSensitiveList #{@balance} smses left"
+    "MonitorSensitiveList #{@balance} smses left"
   end
 
   def process(m)
     super
-    puts @sender
-    return false unless @sender.include?(SENSITIVELIST)
+    return CONTINUE unless @sender.include?(SENSITIVELIST)
 
     puts "SENSITIVE!"
 
@@ -64,7 +63,7 @@ class MonitorSensitiveList < Dummy_Action
       puts "Will send an email to #{email}"
     end
 
-    return true #Don't process this email any more
+    return STOP_PROCESSING
   end
 
   private 

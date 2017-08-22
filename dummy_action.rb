@@ -1,7 +1,10 @@
 class Dummy_Action
 
+  STOP_PROCESSING = "No need to process this email more"
+  CONTINUE = "No harm if you continue processing this email"
+
   def describe
-    puts "Dummy_Action: Email stuff"
+    "Dummy_Action: Email stuff"
   end
 
   def process(m)
@@ -17,6 +20,6 @@ class Dummy_Action
     puts "About: #{@subject}"
     puts
 
-    return false #keep parsing this email
+    return CONTINUE
   end
 end
