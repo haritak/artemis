@@ -28,7 +28,6 @@ class Artemis
   def initialize
 
     initialize_email
-    
     initialize_sms
 
     #each mail action is executed in turn by calling the process method
@@ -51,8 +50,9 @@ class Artemis
       puts "============ #{i} =============="
 
       @mail_actions.each do |ma|
-        puts "--- #{ma.describe} ---"
-        break if ma.process( m ) == Dummy_Action::STOP_PROCESSING
+        result = ma.process( m )
+        puts "--- #{ma.describe} returned #{result}"
+        break if result == Dummy_Action::STOP_PROCESSING
       end
 
       puts "============================"
