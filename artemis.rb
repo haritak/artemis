@@ -13,6 +13,7 @@ load "dummy_action.rb"
 load "sensitive_list.rb"
 load "schedule_base_action.rb"
 load "update_groups_db.rb"
+load "create_carpools_action.rb"
 
 raise "Configuration error, check TESTING" unless defined?(TESTING)
 raise "Configuration error, check USERNAME" unless defined?(USERNAME)
@@ -37,6 +38,7 @@ class Artemis
     @mail_actions = []
     @mail_actions << MonitorSensitiveList.new
     @mail_actions << UpdateScheduleGroupsAction.new
+    @mail_actions << CreateCarPoolsAction.new
   end
 
   def start_processing
@@ -52,6 +54,7 @@ class Artemis
       @mail_actions.each do |ma|
         result = ma.process( m )
         puts "--- #{ma.describe} returned #{result}"
+        #TODO: if result unusual then send an email
         break if result == Dummy_Action::STOP_PROCESSING
       end
 
