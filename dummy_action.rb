@@ -1,7 +1,7 @@
 class Dummy_Action
 
-  STOP_PROCESSING = "No need to process this email more"
-  CONTINUE = "No harm if you continue processing this email"
+  STOP_PROCESSING = "Do not process this email more."
+  CONTINUE = "OK" #No harm if you continue processing this email"
 
   def describe
     "Dummy_Action: Email stuff"
