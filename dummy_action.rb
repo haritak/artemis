@@ -10,7 +10,7 @@ class Dummy_Action
   def process(m)
     @sender = m.from ?  m.from.join : m.from
     @recipients = "#{m.to ? m.to.join : ''} #{m.cc ? m.cc.join : '' } #{m.bcc ? m.bcc.join : ''}"
-    @personal = @recipients.include?(ME)
+    @personal = @recipients.include?(Artemis::ME)
     @subject = m.subject
     @mail = m
 
@@ -19,6 +19,11 @@ class Dummy_Action
     puts "(PERSONAL!)" if @personal
     puts "About: #{@subject}"
     puts
+
+    if @sender.include?(Artemis::ME)
+      puts "Warning, this email was send by me and is being processed by me!"
+      return STOP_PROCESSING
+    end
 
     return CONTINUE
   end
