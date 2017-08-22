@@ -14,8 +14,10 @@ class ScheduleBaseAction < Dummy_Action
     @aboutEfimeries = ( @subject =~ /.*φημερ.ε.*/ )
 
     @attachments = []
+    @attachments_contents = []
     m.attachments.each do |a|
       @attachments << a.filename
+      @attachments_contents << a
     end
 
     find_required_schedule_files(m)
