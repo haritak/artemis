@@ -48,7 +48,7 @@ class CreateCarPoolsAction < ScheduleBaseAction
     groupfixer_versions.each_with_index do |dir,i|
       i+=1
       puts "External script " + i.to_s
-      %x{ cd #{dir} && php groupfixer.php #{whosin_filename} #{xls_filename} > #{target_base}/READY_#{i}.xls  }
+      %x{ cd #{dir} && php groupfixer.php #{whosin_filename} #{xls_filename} > #{target_base}/READY#{dir[-2..-1]}.xls  }
     end
     puts "--------------------------------------------"
     puts "External script finished."
