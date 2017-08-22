@@ -1,0 +1,65 @@
+require 'sinatra'
+require 'sqlite3'
+
+set :bind, '0.0.0.0'
+
+db = SQLite3::Database.open "whosin.db"
+
+allTeachers={}
+def refreshAllTeachers(db, allTeachers)
+  allTeachers.clear
+  stm = db.prepare "SELECT * FROM teachers"
+  rs = stm.execute
+
+  row = rs.next
+  while row
+    allTeachers[ row[0] ] = [ row[1], row[2] ]
+    row = rs.next
+  end
+end
+
+refreshAllTeachers(db, allTeachers)
+allTeachers.each do |k,v|
+  puts "#{k} - #{v}"
+end
+
+get '/' do
+  refreshAllTeachers(db, allTeachers)
+  
+  toReturn="<ul>"
+  allTeachers.each do |i, t|
+    toReturn += "<li><a href='/teacher/#{i}'>"
+    color = 'red'
+    included = 'excluded'
+    color = 'green' if t[1]==1
+    included = 'included' if t[1]==1
+    toReturn += "<font color=#{color}>#{t[0]} is #{included}</font>"
+    toReturn += "</a>"
+    toReturn += "</li>"
+  end
+
+  toReturn+="</ul>"
+  toReturn+="<h2>Following clicks are irreversible.</h2>"
+  toReturn+="<ul>"
+  allTeachers.each do |i, t|
+    toReturn += "<li><a href='/teacher/#{i}/delete'>"
+    toReturn += "delete #{t[0]}"
+    toReturn += "</a>"
+  end
+  return toReturn
+end
+
+get '/teacher/:teacher_id' do
+  t = params[:teacher_id]
+  redirect '/' unless t
+  db.execute("UPDATE teachers SET using_groups=not(using_groups) where id='#{t}'")
+  redirect '/'
+end
+
+get '/teacher/:teacher_id/delete' do
+  t = params[:teacher_id]
+  redirect '/' unless t
+  db.execute("DELETE FROM teachers where id='#{t}'")
+  redirect '/'
+end
+
