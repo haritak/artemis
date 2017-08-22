@@ -1,6 +1,10 @@
 raise "Configuration error" unless defined?(SCHEDULERS)
 
 class ScheduleBaseAction < Dummy_Action
+
+  EFIMERIES_FILENAME = "efimeries.ods"
+  EXCEL_FILENAME = "EXCEL.xls"
+
   def describe
     "Schedule Base Action"
   end
@@ -87,7 +91,7 @@ class ScheduleBaseAction < Dummy_Action
   end
 
   def find_required_efimeries_files(m)
-    @notFoundEfimeriesFiles = ["efimeries.ods"]
+    @notFoundEfimeriesFiles = [EFIMERIES_FILENAME]
     @foundEfimeriesFiles = []
     @notFoundEfimeriesFiles.each do |f|
       if @attachments.include?(f)
