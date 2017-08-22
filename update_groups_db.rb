@@ -49,8 +49,7 @@ class UpdateScheduleGroupsAction < ScheduleBaseAction
   private
 
   def process_schedule(m)
-    xls_idx = @attachments.index( EXCEL_FILENAME )
-    filename = saveLocal( @attachments_contents[xls_idx] )
+    filename = find_and_saveLocal( EXCEL_FILENAME )
 
     %x{ cd helper && php update_whosin.php #{"../"+filename} }
 
@@ -58,8 +57,7 @@ class UpdateScheduleGroupsAction < ScheduleBaseAction
   end
 
   def process_efimeries(m)
-    ef_idx = @attachments.index( EFIMERIES_FILENAME )
-    filename = saveLocal( @attachments_contents[ef_idx] )
+    filename = find_and_saveLocal( EFIMERIES_FILENAME )
 
     parser = EfimeriesParser.new filename
     parser.beSilent
@@ -87,15 +85,4 @@ class UpdateScheduleGroupsAction < ScheduleBaseAction
     return CONTINUE
   end
 
-
-  def saveLocal(attachment)
-    filename = attachment.filename
-    FileUtils.mkdir("tmp") if not File.exist?("tmp/")
-    FileUtils.rm("tmp/#{filename}") if File.exist?("tmp/#{filename}")
-    filename = "tmp/#{filename}"
-    File.open(filename, "w+b", 0644) do |f| 
-      f.write attachment.body.decoded
-    end
-    return filename
-  end
 end
