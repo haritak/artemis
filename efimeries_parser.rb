@@ -11,17 +11,22 @@ class EfimeriesParser
 
   def initialize(filename)
     @efimeries = filename
+    @debug = true
+  end
+
+  def beSilent
+    @debug = false
   end
 
   # returns OK 
   # or the error that happened
-  def parse
+  def parse 
 
     weekdays = ["Δευτέρα", "Τρίτη", "Τετάρτη", "Πέμπτη", "Παρασκευή"]
 
     intermissions = {}
     locations = {}
-    teachers = []
+    @teachers = []
     dayrows = {}
 
     oo = Roo::Spreadsheet.open(@efimeries)
@@ -39,7 +44,7 @@ class EfimeriesParser
       end
     end
 
-    p dayrows
+    p dayrows if @debug
 
     weekdays.each do |wd|
       if not dayrows.include?(wd)
@@ -47,7 +52,7 @@ class EfimeriesParser
       end
     end
 
-    puts "All days were found"
+    puts "All days were found" if @debug
 
     intermissions_row_no = dayrows[weekdays[0]][0]
 
@@ -66,7 +71,7 @@ class EfimeriesParser
     if intermissions.size != NoIntermissions 
       return "Warning! found less than expected intermissions."
     else
-      puts "Number of intermissions seems ok"
+      puts "Number of intermissions seems ok" if @debug
     end
 
 
@@ -89,7 +94,7 @@ class EfimeriesParser
     end
 
     if locations.size == NoLocations
-      puts "All locations were found"
+      puts "All locations were found" if @debug
     else
       return "Warning! Didn't find all locations"
     end
@@ -103,7 +108,7 @@ class EfimeriesParser
 
     puts "Teachers names should be inside the box "+
       "#{rowOfFirstDayFirstPlace},#{columnOfFirstIntermission} and "+
-      "#{rowOfLastDayLastPlace}, #{columnOfLastIntermission}"
+      "#{rowOfLastDayLastPlace}, #{columnOfLastIntermission}" if @debug
 
       column2intermission={}
       intermissions.each do |k,v|
@@ -145,21 +150,21 @@ class EfimeriesParser
         while current_column_no<=columnOfLastIntermission
           cell = sheet.cell(current_row_no, current_column_no)
           cell.strip!
-          teachers<<cell unless teachers.include?(cell)
+          @teachers<<cell unless @teachers.include?(cell)
           current_column_no+=1
         end
         current_row_no+=1
       end
 
-      puts "#{teachers.size} teachers found"
+      puts "#{@teachers.size} @teachers found" if @debug
       total_efimeries_per_day = locations.size * intermissions.size
-      puts "#{total_efimeries_per_day} are the total number of efimeries"
-      efimeries_per_person = ((total_efimeries_per_day.to_f/teachers.size) + 0.5).round
-      puts "#{efimeries_per_person} efimeries should receive each person per day"
-      puts "#{efimeries_per_person*5} efimeries should receive each person per week"
+      puts "#{total_efimeries_per_day} are the total number of efimeries" if @debug
+      efimeries_per_person = ((total_efimeries_per_day.to_f/@teachers.size) + 0.5).round
+      puts "#{efimeries_per_person} efimeries should receive each person per day" if @debug
+      puts "#{efimeries_per_person*5} efimeries should receive each person per week" if @debug
 
       efimeriesPerTeacher = {}
-      teachers.each do |teacher|
+      @teachers.each do |teacher|
 
         current_row_no = rowOfFirstDayFirstPlace
         while current_row_no <= rowOfLastDayLastPlace
@@ -187,21 +192,26 @@ class EfimeriesParser
       totalEfimeries = 0
       countEfimeriesPerTeacher = {}
       efimeriesPerTeacher.each do |k,v|
-        puts k
+        puts k if @debug
         v.each do |l|
-          p l
+          p l if @debug
         end
         countEfimeriesPerTeacher[ k ] = v.size
         totalEfimeries+=v.size
-        puts "-----"
+        puts "-----" if @debug
       end
 
-      p countEfimeriesPerTeacher
-      puts "#{totalEfimeries} efimeries have been assigned"
+      p countEfimeriesPerTeacher if @debug
+      puts "#{totalEfimeries} efimeries have been assigned" if @debug
       if totalEfimeries!=total_efimeries_per_day*5
         return "Consistency error!"
       end
 
       return "OK"
   end
+
+  def each_teacher &block
+    @teachers.each &block
+  end
+
 end
