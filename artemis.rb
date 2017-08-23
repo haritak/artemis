@@ -14,6 +14,7 @@ load "sensitive_list.rb"
 load "schedule_base_action.rb"
 load "update_groups_db.rb"
 load "create_carpools_action.rb"
+load "publish_schedule_action.rb"
 
 raise "Configuration error, check TESTING" unless defined?(TESTING)
 raise "Configuration error, check USERNAME" unless defined?(USERNAME)
@@ -39,6 +40,7 @@ class Artemis
     @mail_actions << MonitorSensitiveList.new
     @mail_actions << UpdateScheduleGroupsAction.new
     @mail_actions << CreateCarPoolsAction.new
+    @mail_actions << PublishScheduleAction.new
   end
 
   def start_processing
@@ -73,7 +75,7 @@ class Artemis
     end
   end
 
-  def self.send_warning_email(trigering_email, recipients, text, attachments=nil)
+  def self.send_email(trigering_email, recipients, text, attachments=nil)
     Mail.deliver do
       charset = "UTF-8"
       content_transfer_encoding="8bit"
