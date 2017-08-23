@@ -59,7 +59,7 @@ class CreateCarPoolsAction < ScheduleBaseAction
       "<p>Μπορείτε να ρυθμίσετε ποιοί/ες συμμετέχουν στα groups"+
       " χρησιμοποιώντας <br/>"+
       " <a href='http://srv-1tee-moiron.ira.sch.gr:4567'>αυτό το link</a>.</p>"
-    Artemis::send_email(m, ["charitakis.ioannis@gmail.com"], msg, results)
+    Artemis::send_email(m, TESTING ? [ SCHEDULERS[0] ] : SCHEDULERS, msg, results)
 
     return CONTINUE
   end

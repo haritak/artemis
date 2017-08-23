@@ -45,7 +45,7 @@ class ScheduleBaseAction < Dummy_Action
           "<li>#{notFoundList.join('</li><li>')}</li>"+
           "</ul>"+
           "<p><strong>Ξαναστείλτε το email συμπεριλαμβάνοντας τα παραπάνω αρχεία.</strong></p>"
-        Artemis::send_email(m, ['charitakis.ioannis@gmail.com'], warning) #TODO should inform everyone SCHEDULERS
+        Artemis::send_email(m, TESTING ? [ SCHEDULERS[0] ] : SCHEDULERS, warning) #TODO should inform everyone SCHEDULERS
 
         return STOP_PROCESSING
       end
