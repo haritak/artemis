@@ -21,8 +21,6 @@ raise "Configuration error, check USERNAME" unless defined?(USERNAME)
 raise "Configuration error, check PASSWORD" unless defined?(PASSWORD)
 raise "Configuration error, check DONTDELETEMAILS" unless defined?(DONTDELETEMAILS)
 
-SKIP_SMSES = true #TODO
-
 class Artemis
 
   ME = USERNAME
@@ -184,4 +182,10 @@ end
 
 artemis = Artemis.new
 artemis.start_processing
+
 puts "Bye!"
+
+
+waitTime = 400 + rand(900)
+puts "Will wait for #{waitTime} seconds before quiting for good."
+sleep waitTime
