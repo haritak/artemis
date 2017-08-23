@@ -15,7 +15,13 @@ class MonitorSensitiveList < Dummy_Action
   def process(m)
     first_pass = super
     return STOP_PROCESSING if first_pass == STOP_PROCESSING
-    return CONTINUE unless @sender.include?(SENSITIVELIST)
+
+    isSensitive = false
+
+    isSensitive = true if @sender.include?(SENSITIVELIST)
+    isSensitive = true if @subject =~ /ΕΠΑΛ Ευαίσθητο/
+
+    return CONTINUE if not isSensitive
 
     puts "SENSITIVE!"
 
