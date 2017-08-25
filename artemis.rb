@@ -7,7 +7,11 @@ require 'json'
 require 'uri'
 load "forbidden"
 
-#actions. 
+#one time actions
+load "basic_one_time_action.rb"
+load "check_quota.rb"
+
+#email actions. 
 #Order is important
 load "dummy_action.rb"
 load "sensitive_list.rb"
@@ -15,6 +19,7 @@ load "schedule_base_action.rb"
 load "update_groups_db.rb"
 load "create_carpools_action.rb"
 load "publish_schedule_action.rb"
+
 
 raise "Configuration error, check TESTING" unless defined?(TESTING)
 raise "Configuration error, check USERNAME" unless defined?(USERNAME)
@@ -30,6 +35,11 @@ class Artemis
     initialize_email
     initialize_sms
 
+    #one time actions are executed at the start
+    #Then the email processing follows
+    @one_time_actions = []
+    @one_time_actions << CheckQuota.new
+
     #each mail action is executed in turn by calling the process method
     #if a process method returns true, no more actions are executed for 
     #the current email.
@@ -42,6 +52,12 @@ class Artemis
   end
 
   def start_processing
+
+    puts "Starting one time actions"
+    @one_time_actions.each do |a|
+      result = a.execute()
+      puts "--- #{a.describe} return #{result}"
+    end
 
     puts "Starting email processing on"
     now = DateTime.now
@@ -114,13 +130,23 @@ class Artemis
     return @@balance
   end
 
-  def self.send_sms(tel, msg)
-    url = "https://easysms.gr/api/sms/send?"+
-    URI.encode_www_form("key"=>@@api_key, "from"=>"Artemis", "to"=>tel, "text"=>msg, "type"=>"json")
-    resp = HTTP.get url
-    rj = JSON.parse resp.body
-    @@balance = rj["balance"].to_i
-    puts "New balance is #{@@balance}"
+  def self.send_sms(phones, msg)
+    return if SKIP_SMSES
+
+    return if @@balance < 100 #TODO : make a one time action to check for that number
+
+    phones.each do |tel|
+      url = "https://easysms.gr/api/sms/send?"+
+        URI.encode_www_form("key"=>@@api_key,
+                            "from"=>"Artemis", 
+                            "to"=>tel, 
+                            "text"=>msg,
+                            "type"=>"json")
+      resp = HTTP.get url
+      rj = JSON.parse resp.body
+      @@balance = rj["balance"].to_i
+      puts "New balance is #{@@balance}"
+    end
   end
 
 
@@ -146,6 +172,10 @@ class Artemis
   end
 
   def initialize_sms
+
+    if SKIP_SMSES
+      puts "Skipping SMSes"
+    end
 
     #acquire api key
     url = "https://easysms.gr/api/key/get?"+
