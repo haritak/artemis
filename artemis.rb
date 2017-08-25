@@ -90,6 +90,10 @@ class Artemis
   end
 
   def self.send_alert_email(recipients, text, attachments=nil)
+    return if recipients.length == 0
+
+    recipients = [ recipients[0] ] if TESTING
+
     Mail.deliver do
       charset = "UTF-8"
       content_transfer_encoding="8bit"
@@ -116,6 +120,10 @@ class Artemis
   end
 
   def self.send_email(trigering_email, recipients, text, attachments=nil)
+    return if recipients.length == 0
+
+    recipients = [ recipients[0] ] if TESTING
+
     Mail.deliver do
       charset = "UTF-8"
       content_transfer_encoding="8bit"
@@ -158,6 +166,9 @@ class Artemis
 
   def self.send_sms(phones, msg)
     return if SKIP_SMSES
+    return if phones.length == 0
+
+    phones = [ phones[0] ] if TESTING
 
     return if @@balance < 100 #TODO : make a one time action to check for that number
 

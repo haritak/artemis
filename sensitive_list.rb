@@ -31,7 +31,7 @@ class MonitorSensitiveList < Dummy_Action
     msg="<p><em>Κάποιο μήνυμα περιμένει στην λίστα των ευαίσθητων</em></p>"+
       "<p>Παρακαλώ ενημερώστε τον διευθυντή/υποδιευθυντή.</p>"+
       "<p><small>Sms balance: #{@balance}.</small></p>"
-    Artemis::send_email(m, TESTING ? [ SCHEDULERS[0] ] : SCHEDULERS, msg)
+    Artemis::send_email(m, SCHEDULERS, msg)
 
     return STOP_PROCESSING
   end

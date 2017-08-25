@@ -64,7 +64,7 @@ class PublishScheduleAction < ScheduleBaseAction
       "<a href='http://srv-1tee-moiron.ira.sch.gr/schedule/current'>Τρέχων πρόγραμμα</a><br/>"+
       "<a href='http://srv-1tee-moiron.ira.sch.gr/schedule/next'>Επόμενης εβδομάδας πρόγραμμα</a><br/>"+
       "</p>"
-    Artemis::send_email(m, TESTING ? [ SCHEDULERS[0] ] : SCHEDULERS, msg)
+    Artemis::send_email(m, SCHEDULERS, msg)
 
     return CONTINUE
   end

@@ -65,7 +65,7 @@ class UpdateScheduleGroupsAction < ScheduleBaseAction
     result = parser.parse
     if result != "OK"
       m = "Error while parsing: " + result
-      Artemis::send_email(m, TESTING ? [ SCHEDULERS[0] ] : SCHEDULERS, warning) #TODO should inform everyone SCHEDULERS
+      Artemis::send_email(m, SCHEDULERS, warning) #TODO should inform everyone SCHEDULERS
       return STOP_PROCESSING
     end
 

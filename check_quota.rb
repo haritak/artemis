@@ -32,13 +32,11 @@ class CheckQuota < BasicOneTimeAction
     alarm = ""
     if percentage > @settings["alarm_limit"] 
       if @settings[last_percentage] < @settings["alarm_limit"]
-        Artemis::send_sms( TESTING ?
-                          [ CHECK_QUOTA_ALERT_RECIPIENT[0] ] :
-                          CHECK_QUOTA_ALERT_RECIPIENT, 
+        Artemis::send_sms( CHECK_QUOTA_ALERT_RECIPIENT, 
                           "Mail box #{CHECK_QUOTA_USERNAME} almost full. #{percentage.to_i}%.")
 
         msg="<p><em>Σχεδόν γεμάτο (#{percentage.to_i}%) το γραμματοκιβώτιο #{CHECK_QUOTA_USERNAME}</em></p>"
-        Artemis::send_alert_email(TESTING ? [ CHECK_QUOTA_ALERT_EMAIL[0] ] : CHECK_QUOTA_ALERT_EMAIL, msg)
+        Artemis::send_alert_email(CHECK_QUOTA_ALERT_EMAIL, msg)
       end
     end
 
