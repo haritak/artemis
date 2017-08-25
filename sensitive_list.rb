@@ -26,13 +26,7 @@ class MonitorSensitiveList < Dummy_Action
     puts "SENSITIVE!"
 
     #inform through smses
-    if @balance > 100 and not SKIP_SMSES
-      SENSITIVE_SMS_RECIPIENTS.each do |tel|
-        Artemis::send_sms(tel, "Sensitive email arrived. Please inform accordingly.")
-      end
-    else
-      puts "Skipping smses or balance(#{@balance}) not enough or other error."
-    end
+    Artemis::send_sms(SENSITIVE_SMS_RECIPIENTS, "Sensitive email arrived. Please inform accordingly.")
 
     msg="<p><em>Κάποιο μήνυμα περιμένει στην λίστα των ευαίσθητων</em></p>"+
       "<p>Παρακαλώ ενημερώστε τον διευθυντή/υποδιευθυντή.</p>"+
