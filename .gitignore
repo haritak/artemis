@@ -16,6 +16,7 @@ forbidden
 **/*swp
 **/whosin.db
 **/emails.db
+check_quota.yml
 
 # Used by dotenv library to load environment variables.
 # .env
