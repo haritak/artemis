@@ -89,6 +89,32 @@ class Artemis
     end
   end
 
+  def self.send_alert_email(recipients, text, attachments=nil)
+    Mail.deliver do
+      charset = "UTF-8"
+      content_transfer_encoding="8bit"
+      from "Άρτεμις <#{ME}>"
+      to recipients.join(",")
+      if attachments
+        attachments.each do |f|
+          add_file f
+        end
+      end
+      now = DateTime.now
+      subject "Ενημέρωση #{now.day}/#{now.month}/#{now.year} #{now.hour}:#{now.minute}.#{now.second}"
+      html_part do
+        content_type "text/html; charset=utf-8"
+        body "<p>Γειά σας,</p>"+
+          "<p>=========================================================</p>"+
+          "#{text}"+
+          "<p>=========================================================</p>"+
+          ""+
+          "<p>Να είστε καλά,</p>"+
+          "<p><em>Άρτεμις</em></p>"
+      end
+    end
+  end
+
   def self.send_email(trigering_email, recipients, text, attachments=nil)
     Mail.deliver do
       charset = "UTF-8"

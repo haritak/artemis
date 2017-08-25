@@ -35,10 +35,9 @@ class CheckQuota < BasicOneTimeAction
         Artemis::send_sms( TESTING ?
                           [ CHECK_QUOTA_ALERT_RECIPIENT[0] ] :
                           CHECK_QUOTA_ALERT_RECIPIENT, 
-                          "Mail box #{CHECK_QUOTA_USERNAME} almost full.")
+                          "Mail box #{CHECK_QUOTA_USERNAME} almost full. #{percentage.to_i}%.")
 
-        msg="<p><em>Σχεδόν γεμάτο το γραμματοκιβώτιο του #{CHECK_QUOTA_USERNAME}</em></p>"+
-          "<p>Παρακαλώ ενημερώστε τον διευθυντή/υποδιευθυντή.</p>"
+        msg="<p><em>Σχεδόν γεμάτο (#{percentage.to_i}%) το γραμματοκιβώτιο #{CHECK_QUOTA_USERNAME}</em></p>"
         Artemis::send_alert_email(TESTING ? [ CHECK_QUOTA_ALERT_EMAIL[0] ] : CHECK_QUOTA_ALERT_EMAIL, msg)
       end
     end
