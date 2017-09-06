@@ -32,8 +32,19 @@ class Artemis
   
   def initialize
 
-    initialize_email
-    initialize_sms
+    begin
+      initialize_email
+    rescue => e
+      p e
+      print e
+    end
+    begin
+      initialize_sms
+    rescue => e
+      p e
+      print e
+    end
+
 
     #one time actions are executed at the start
     #Then the email processing follows
@@ -45,17 +56,42 @@ class Artemis
     #the current email.
     #
     @mail_actions = []
-    @mail_actions << MonitorSensitiveList.new
-    @mail_actions << UpdateScheduleGroupsAction.new
-    @mail_actions << CreateCarPoolsAction.new
-    @mail_actions << PublishScheduleAction.new
+    begin
+      @mail_actions << MonitorSensitiveList.new
+    rescue => e
+      p e
+      print e
+    end
+    begin
+      @mail_actions << UpdateScheduleGroupsAction.new
+    rescue => e
+      p e
+      print e
+    end
+    begin
+      @mail_actions << CreateCarPoolsAction.new
+    rescue => e
+      p e
+      print e
+    end
+    begin
+      @mail_actions << PublishScheduleAction.new
+    rescue => e
+      p e
+      print e
+    end
   end
 
   def start_processing
 
     puts "Starting one time actions"
     @one_time_actions.each do |a|
-      result = a.execute()
+      begin
+        result = a.execute()
+      rescue => e
+        p e
+        puts e
+      end
       puts "--- #{a.describe} return #{result}"
     end
 
@@ -68,10 +104,15 @@ class Artemis
       puts "============ #{i} =============="
 
       @mail_actions.each do |ma|
-        result = ma.process( m )
-        puts "--- #{ma.describe} returned #{result}"
-        #TODO: if result unusual then send an email
-        break if result == Dummy_Action::STOP_PROCESSING
+        begin
+          result = ma.process( m )
+          puts "--- #{ma.describe} returned #{result}"
+          #TODO: if result unusual then send an email
+          break if result == Dummy_Action::STOP_PROCESSING
+        rescue => e
+          p e
+          puts e
+        end
       end
 
       puts "============================"
