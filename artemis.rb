@@ -88,11 +88,11 @@ class Artemis
     @one_time_actions.each do |a|
       begin
         result = a.execute()
+        puts "--- #{a.describe} return #{result}"
       rescue => e
         p e
         puts e
       end
-      puts "--- #{a.describe} return #{result}"
     end
 
     puts "Starting email processing on"
