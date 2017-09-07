@@ -1,0 +1,23 @@
+echo HY3:
+wakeonlan D0:50:99:88:3D:56
+sleep 1
+wakeonlan 00:50:BF:D5:DD:C9
+sleep 1
+wakeonlan 00:23:AE:7A:DC:37
+sleep 1
+wakeonlan 00:23:AE:7A:73:B0
+sleep 1
+wakeonlan 00:23:AE:7A:8A:E1
+sleep 1
+wakeonlan D0:50:99:88:3D:9F
+sleep 1
+wakeonlan 00:23:AE:7B:56:CC
+sleep 1
+wakeonlan D0:50:99:22:6D:A1
+sleep 1
+wakeonlan D0:50:99:0D:DB:CF
+sleep 1
+wakeonlan 00:23:AE:7A:89:66
+sleep 1
+
+echo done
