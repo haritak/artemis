@@ -1,7 +1,7 @@
 echo Dioikisi:
 
 echo teachersltspserver:
-wakeonlan 90:E2:BA:3A:D1:27
+wakeonlan 50:e5:49:2a:84:76
 sleep 1
 
 echo apostolakis pc:
