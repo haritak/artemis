@@ -10,7 +10,7 @@ get '/' do
   "<h2>" + "<a href='/wake_hy1'>" + "Wake up lab1" + "</a>" + "</h2>" +
   "<h2>" + "<a href='/wake_hy2'>" + "Wake up lab2" + "</a>" + "</h2>" +
   "<h2>" + "<a href='/wake_hy3'>" + "Wake up lab3" + "</a>" + "</h2>" +
-  "<h2>" + "<a href='/wake_hy4'>" + "Wake up lab4" + "</a>" + "</h2>"
+  "<h2>" + "<a href='/wake_hy4'>" + "Wake up lab4" + "</a>" + "</h2>" +
   "<h2>" + "<a href='/wake_hy4'>" + "Wake up a2" + "</a>" + "</h2>"
 end
 
