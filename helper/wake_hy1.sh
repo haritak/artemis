@@ -1,4 +1,7 @@
 echo HY1:
+wakeonlan 00:C0:26:55:FB:08
+sleep 1
+
 wakeonlan 00:0E:A6:56:08:50
 sleep 1
 wakeonlan 00:26:18:C0:3B:DE
