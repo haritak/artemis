@@ -7,6 +7,7 @@ set :bind, '0.0.0.0'
 set :port, 5000
 
 get '/' do
+  "<h1>" + "<a href='/wake_lab2_ltsp_server'>" + "Wake up lab2 server (ltsp server)" + "</a>" + "</h1>" +
   "<h2>" + "<a href='/wake_hy1'>" + "Wake up lab1" + "</a>" + "</h2>" +
   "<h2>" + "<a href='/wake_hy2'>" + "Wake up lab2" + "</a>" + "</h2>" +
   "<h2>" + "<a href='/wake_hy3'>" + "Wake up lab3" + "</a>" + "</h2>" +
@@ -31,5 +32,10 @@ end
 
 get '/wake_hy4' do
   `ssh administrator@10.1.1.220 artemis_helper/wake_hy4.sh`
+  redirect '/'
+end
+
+get '/wake_lab2_ltsp_server' do
+  `helper/wake_lab2_ltsp_server.sh`
   redirect '/'
 end
