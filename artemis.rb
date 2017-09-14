@@ -11,6 +11,7 @@ load "forbidden"
 load "basic_one_time_action.rb"
 load "check_quota.rb"
 load "check_free_mem.rb"
+load "check_free_disk.rb"
 
 #email actions. 
 #Order is important
@@ -52,6 +53,7 @@ class Artemis
     @one_time_actions = []
     @one_time_actions << CheckQuota.new
     @one_time_actions << CheckFreeMem.new
+    @one_time_actions << CheckFreeDisk.new
 
     #each mail action is executed in turn by calling the process method
     #if a process method returns true, no more actions are executed for 
