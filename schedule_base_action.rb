@@ -73,6 +73,12 @@ class ScheduleBaseAction < Dummy_Action
     return filename
   end
 
+  def self.findLocal(filename)
+    filename = "tmp/#{filename}"
+    return nil if not File.exist?( filename )
+    filename
+  end
+
   def find_and_saveLocal(filename)
     idx = @attachments.index( filename )
     return saveLocal( @attachments_contents[idx] ) if idx 

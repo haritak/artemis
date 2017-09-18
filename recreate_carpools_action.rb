@@ -10,7 +10,19 @@ class ReCreateCarPoolsAction < Dummy_Action
     recreate_groups_command = ( @subject =~ /.*regroup.*/ )
     return CONTINUE if not recreate_groups_command 
 
-    target_base = "./tmp" #TODO : too fragile
+    xls_filename = 
+      ScheduleBaseAction.findLocal( ScheduleBaseAction::EXCEL_FILENAME )
+    return "FAILED to find previous EXCEL.xls" if not xls_filename
+
+    xls_filename = File.absolute_path( xls_filename )
+
+    whosin_filename = File.absolute_path( "whosin.db" )
+    return "FAILED to find whosin.db" if not whosin_filename
+
+    groupfixer_base_dir = File.absolute_path ( "../GroupFixer" )
+    return "FAILED to find groupfixer_base_dir" if not groupfixer_base_dir
+
+    groupfixer_versions = Dir[ groupfixer_base_dir + "/groupfixer_*" ]
 
     puts "Calling external script. Its output follows."
     puts "--------------------------------------------"
