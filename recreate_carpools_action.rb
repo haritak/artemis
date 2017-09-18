@@ -10,7 +10,7 @@ class ReCreateCarPoolsAction < Dummy_Action
     recreate_groups_command = ( @subject =~ /.*regroup.*/ )
     return CONTINUE if not recreate_groups_command 
 
-    xls_filename = find_and_saveLocal("EXCEL.xls")
+    xls_filename = ScheduleBaseAction.find_and_saveLocal("EXCEL.xls")
     if not xls_filename
       #if there is no attachment named EXCEL.xls, then use the previous one
       xls_filename = 
