@@ -10,6 +10,8 @@ class ReCreateCarPoolsAction < Dummy_Action
     recreate_groups_command = ( @subject =~ /.*regroup.*/ )
     return CONTINUE if not recreate_groups_command 
 
+    target_base = "./tmp" #TODO : too fragile
+
     puts "Calling external script. Its output follows."
     puts "--------------------------------------------"
     groupfixer_versions.each_with_index do |dir,i|
