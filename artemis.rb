@@ -21,6 +21,7 @@ load "schedule_base_action.rb"
 load "update_groups_db.rb"
 load "create_carpools_action.rb"
 load "publish_schedule_action.rb"
+load "recreate_carpools_action.rb"
 
 
 raise "Configuration error, check TESTING" unless defined?(TESTING)
@@ -80,6 +81,12 @@ class Artemis
     end
     begin
       @mail_actions << PublishScheduleAction.new
+    rescue => e
+      p e
+      print e
+    end
+    begin
+      @mail_actions << ReCreateCarPoolsAction.new
     rescue => e
       p e
       print e
