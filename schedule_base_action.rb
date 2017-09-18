@@ -60,9 +60,7 @@ class ScheduleBaseAction < Dummy_Action
     return CONTINUE
   end
 
-  protected
-
-  def saveLocal(attachment)
+  def self.saveLocal(attachment)
     filename = attachment.filename
     FileUtils.mkdir("tmp") if not File.exist?("tmp/")
     FileUtils.rm("tmp/#{filename}") if File.exist?("tmp/#{filename}")
@@ -79,7 +77,7 @@ class ScheduleBaseAction < Dummy_Action
     filename
   end
 
-  def find_and_saveLocal(filename)
+  def self.find_and_saveLocal(filename)
     idx = @attachments.index( filename )
     return saveLocal( @attachments_contents[idx] ) if idx 
     return nil

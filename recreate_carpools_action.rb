@@ -10,9 +10,13 @@ class ReCreateCarPoolsAction < Dummy_Action
     recreate_groups_command = ( @subject =~ /.*regroup.*/ )
     return CONTINUE if not recreate_groups_command 
 
-    xls_filename = 
-      ScheduleBaseAction.findLocal( ScheduleBaseAction::EXCEL_FILENAME )
-    return "FAILED to find previous EXCEL.xls" if not xls_filename
+    xls_filename = find_and_saveLocal("EXCEL.xls")
+    if not xls_filename
+      #if there is no attachment named EXCEL.xls, then use the previous one
+      xls_filename = 
+        ScheduleBaseAction.findLocal( ScheduleBaseAction::EXCEL_FILENAME )
+      return "FAILED to find previous EXCEL.xls" if not xls_filename
+    end
 
     xls_filename = File.absolute_path( xls_filename )
 
