@@ -14,6 +14,13 @@ class Dummy_Action
     @subject = m.subject
     @mail = m
 
+    @attachments = []
+    @attachments_contents = []
+    m.attachments.each do |a|
+      @attachments << a.filename
+      @attachments_contents << a
+    end
+
     puts "From #{@sender}"
     puts "To #{@recipients}"
     puts "(PERSONAL!)" if @personal
@@ -26,5 +33,28 @@ class Dummy_Action
     end
 
     return CONTINUE
+  end
+
+  def saveLocal(attachment)
+    filename = attachment.filename
+    FileUtils.mkdir("tmp") if not File.exist?("tmp/")
+    FileUtils.rm("tmp/#{filename}") if File.exist?("tmp/#{filename}")
+    filename = "tmp/#{filename}"
+    File.open(filename, "w+b", 0644) do |f| 
+      f.write attachment.body.decoded
+    end
+    return filename
+  end
+
+  def findLocal(filename)
+    filename = "tmp/#{filename}"
+    return nil if not File.exist?( filename )
+    filename
+  end
+
+  def find_and_saveLocal(filename)
+    idx = @attachments.index( filename )
+    return saveLocal( @attachments_contents[idx] ) if idx 
+    return nil
   end
 end

@@ -17,13 +17,6 @@ class ScheduleBaseAction < Dummy_Action
     @aboutSchedule = ( @subject =~ /.*ρολ.γιο.*ρ.γραμ.*/ )
     @aboutEfimeries = ( @subject =~ /.*φημερ.ε.*/ )
 
-    @attachments = []
-    @attachments_contents = []
-    m.attachments.each do |a|
-      @attachments << a.filename
-      @attachments_contents << a
-    end
-
     find_required_schedule_files(m)
     p @foundScheduleFiles
     p @notFoundScheduleFiles
@@ -60,28 +53,7 @@ class ScheduleBaseAction < Dummy_Action
     return CONTINUE
   end
 
-  def self.saveLocal(attachment)
-    filename = attachment.filename
-    FileUtils.mkdir("tmp") if not File.exist?("tmp/")
-    FileUtils.rm("tmp/#{filename}") if File.exist?("tmp/#{filename}")
-    filename = "tmp/#{filename}"
-    File.open(filename, "w+b", 0644) do |f| 
-      f.write attachment.body.decoded
-    end
-    return filename
-  end
 
-  def self.findLocal(filename)
-    filename = "tmp/#{filename}"
-    return nil if not File.exist?( filename )
-    filename
-  end
-
-  def self.find_and_saveLocal(filename)
-    idx = @attachments.index( filename )
-    return saveLocal( @attachments_contents[idx] ) if idx 
-    return nil
-  end
 
   private
 
