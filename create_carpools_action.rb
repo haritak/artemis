@@ -60,7 +60,7 @@ class CreateCarPoolsAction < ScheduleBaseAction
       " χρησιμοποιώντας <br/>"+
       " <a href='http://srv-1tee-moiron.ira.sch.gr:4567'>αυτό το link</a>.<br/>" +
       "Σε περίπτωση που κάνετε αλλαγές στην σύνθεση των group, στείλτε μου ένα email<br/>" +
-      "με θέμα : regroup</p>"
+      "με θέμα : regroup και μοναδικό συνημμένο το αρχείο EXCEL.xls του τελευταίου προγράμματος.</p>"
     Artemis::send_email(m, SCHEDULERS, msg, results)
 
     return CONTINUE
