@@ -24,6 +24,9 @@ allTeachers.each do |k,v|
 end
 
 get '/' do
+  if not params[:password]
+    return "Please provide as password 111"
+  end
   refreshAllTeachers(db, allTeachers)
   
   toReturn="<ul>"
@@ -51,15 +54,15 @@ end
 
 get '/teacher/:teacher_id' do
   t = params[:teacher_id]
-  redirect '/' unless t
+  redirect '/?password=111' unless t
   db.execute("UPDATE teachers SET using_groups=not(using_groups) where id='#{t}'")
-  redirect '/'
+  redirect '/?password=111'
 end
 
 get '/teacher/:teacher_id/delete' do
   t = params[:teacher_id]
-  redirect '/' unless t
+  redirect '/?password=111' unless t
   db.execute("DELETE FROM teachers where id='#{t}'")
-  redirect '/'
+  redirect '/?password=111'
 end
 
