@@ -13,7 +13,8 @@ def refreshAllTeachers(db, allTeachers)
 
   row = rs.next
   while row
-    allTeachers[ row[0] ] = [ row[1], row[2] ]
+    #0:id, 1:name, 2:using_groups, 3:driver
+    allTeachers[ row[0] ] = [ row[1], row[2], row[3] ]
     row = rs.next
   end
 end
@@ -38,6 +39,15 @@ get '/' do
     included = 'included' if t[1]==1
     toReturn += "<font color=#{color}>#{t[0]} is #{included}</font>"
     toReturn += "</a>"
+
+    toReturn += "______ <a href='/teacher/driver/#{i}'>"
+    color = 'red'
+    included = 'not a driver'
+    color = 'green' if t[2]==1
+    included = 'a driver' if t[2]==1
+    toReturn += "<font color=#{color}>is #{included}</font>"
+    toReturn += "</a>"
+
     toReturn += "</li>"
   end
 
@@ -52,12 +62,20 @@ get '/' do
   return toReturn
 end
 
+get '/teacher/driver/:teacher_id' do
+  t = params[:teacher_id]
+  redirect '/?password=111' unless t
+  db.execute("UPDATE teachers SET driver=not(driver) where id='#{t}'")
+  redirect '/?password=111'
+end
+
 get '/teacher/:teacher_id' do
   t = params[:teacher_id]
   redirect '/?password=111' unless t
   db.execute("UPDATE teachers SET using_groups=not(using_groups) where id='#{t}'")
   redirect '/?password=111'
 end
+
 
 get '/teacher/:teacher_id/delete' do
   t = params[:teacher_id]
