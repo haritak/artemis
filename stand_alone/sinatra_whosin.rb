@@ -32,7 +32,7 @@ get '/' do
   
   toReturn="<ul>"
   allTeachers.each do |i, t|
-    toReturn += "<li><a href='/teacher/#{i}'>"
+    toReturn += "<li><a href='/teacher/#{i}?password=111'>"
     color = 'red'
     included = 'excluded'
     color = 'green' if t[1]==1
@@ -40,7 +40,7 @@ get '/' do
     toReturn += "<font color=#{color}>#{t[0]} is #{included}</font>"
     toReturn += "</a>"
 
-    toReturn += "______ <a href='/teacher/driver/#{i}'>"
+    toReturn += "______ <a href='/teacher/driver/#{i}?password=111'>"
     color = 'red'
     included = 'not a driver'
     color = 'green' if t[2]==1
@@ -55,7 +55,7 @@ get '/' do
   toReturn+="<h2>Following clicks are irreversible.</h2>"
   toReturn+="<ul>"
   allTeachers.each do |i, t|
-    toReturn += "<li><a href='/teacher/#{i}/delete'>"
+    toReturn += "<li><a href='/teacher/#{i}/delete?password=111'>"
     toReturn += "delete #{t[0]}"
     toReturn += "</a>"
   end
@@ -63,6 +63,9 @@ get '/' do
 end
 
 get '/teacher/driver/:teacher_id' do
+  if not params[:password]
+    return "Please provide as password 111"
+  end
   t = params[:teacher_id]
   redirect '/?password=111' unless t
   db.execute("UPDATE teachers SET driver=not(driver) where id='#{t}'")
@@ -70,6 +73,9 @@ get '/teacher/driver/:teacher_id' do
 end
 
 get '/teacher/:teacher_id' do
+  if not params[:password]
+    return "Please provide as password 111"
+  end
   t = params[:teacher_id]
   redirect '/?password=111' unless t
   db.execute("UPDATE teachers SET using_groups=not(using_groups) where id='#{t}'")
@@ -78,6 +84,9 @@ end
 
 
 get '/teacher/:teacher_id/delete' do
+  if not params[:password]
+    return "Please provide as password 111"
+  end
   t = params[:teacher_id]
   redirect '/?password=111' unless t
   db.execute("DELETE FROM teachers where id='#{t}'")
