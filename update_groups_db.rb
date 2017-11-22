@@ -15,7 +15,7 @@ class UpdateScheduleGroupsAction < ScheduleBaseAction
     FileUtils.touch('whosin.db')
     db = SQLite3::Database.open "whosin.db"
     db.execute "CREATE TABLE IF NOT EXISTS "+
-      "teachers(id INTEGER PRIMARY KEY AUTOINCREMENT, timetables_name TEXT UNIQUE, using_groups TINYINT)"
+      "teachers(id INTEGER PRIMARY KEY AUTOINCREMENT, timetables_name TEXT UNIQUE, using_groups TINYINT, driver TINYINT DEFAULT 1)"
     db.close
 
     begin
