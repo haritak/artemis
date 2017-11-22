@@ -36,7 +36,7 @@ for ($row = 1; $row <= $highestRow; ++$row) {
     $ret = $handle->query($sql);
     if ($ret->fetchArray(SQLITE3_ASSOC) == FALSE) {
       /* this is a new name, go on and insert it to whosin.db */
-      $sql = "INSERT INTO teachers VALUES(NULL, '".$name."',0)";
+      $sql = "INSERT INTO teachers VALUES(NULL, '".$name."',0,1)";
       $op = $handle->prepare($sql);
       $op->execute();
     }
