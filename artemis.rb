@@ -34,6 +34,7 @@ class Artemis
   ME = USERNAME
   
   def initialize
+    puts "Initialization started"
 
     begin
       initialize_email
@@ -49,6 +50,7 @@ class Artemis
     end
 
 
+    puts "Initializing one time actions..."
     #one time actions are executed at the start
     #Then the email processing follows
     @one_time_actions = []
@@ -60,6 +62,7 @@ class Artemis
     #if a process method returns true, no more actions are executed for 
     #the current email.
     #
+    puts "Initializing mail actions..."
     @mail_actions = []
     begin
       @mail_actions << MonitorSensitiveList.new
@@ -91,6 +94,8 @@ class Artemis
       p e
       print e
     end
+
+    puts "End of all initializations"
   end
 
   def start_processing
@@ -242,6 +247,7 @@ class Artemis
   private
 
   def initialize_email
+    puts "Initializing emails"
     Mail.defaults do
       retriever_method :imap, 
         :address    => "imap.googlemail.com",
@@ -261,6 +267,7 @@ class Artemis
   end
 
   def initialize_sms
+    puts "Initializing smses"
 
     if SKIP_SMSES
       puts "Skipping SMSes"
@@ -308,3 +315,4 @@ puts "Bye!"
 waitTime = 400 + rand(900)
 puts "Will wait for #{waitTime} seconds before quiting for good."
 sleep waitTime
+puts "This is the END."
