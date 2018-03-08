@@ -83,6 +83,10 @@ get '/teacher/:teacher_id' do
 end
 
 
+#Προσοχή εδώ:
+#Αν τα internet bots ανακαλύψουν τα παρακάτω links
+#τότε αυτόματα σβήνουν τα πάντα στο πέρασμά τους....
+
 get '/teacher/:teacher_id/delete' do
   if not params[:password]
     return "Please provide as password 111"
