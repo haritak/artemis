@@ -275,12 +275,12 @@ class Artemis
 
     #acquire api key
     uri = URI("https://easysms.gr/api/key/get")
-    params = { timeout: 30, "username"=>SMS_USERNAME,
+    params = { "username"=>SMS_USERNAME,
                           "password"=>SMS_PASSWORD,
-                          "type"=>"json" }
-    url = URI.encode_www_form( params )
+                          "type"=>"json", timeout: 10 }
+    uri.query = URI.encode_www_form( params )
 
-    resp = HTTP.get url
+    resp = HTTP.get uri
     rj = JSON.parse resp.body
 
     if rj["error"] != "0" 
