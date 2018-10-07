@@ -58,7 +58,7 @@ class CreateCarPoolsAction < ScheduleBaseAction
       "Τα αρχεία των groups δημιουργήθηκαν επιτυχώς.</em></p>"+
       "<p>Μπορείτε να ρυθμίσετε ποιοί/ες συμμετέχουν στα groups"+
       " χρησιμοποιώντας <br/>"+
-      " <a href='http://srv-1tee-moiron.ira.sch.gr:4567'>αυτό το link</a>.<br/>" +
+      " <a href='http://srv-1tee-moiron.ira.sch.gr:4567/?password=111'>αυτό το link</a>.<br/>" +
       "Σε περίπτωση που κάνετε αλλαγές στην σύνθεση των group, στείλτε μου ένα email<br/>" +
       "με θέμα : regroup και μοναδικό συνημμένο το αρχείο EXCEL.xls του τελευταίου προγράμματος.</p>"
     Artemis::send_email(m, SCHEDULERS, msg, results)
