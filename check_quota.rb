@@ -22,7 +22,7 @@ class CheckQuota < BasicOneTimeAction
 
   def execute
     super
-    imap = Net::IMAP.new("mail.sch.gr")
+    imap = Net::IMAP.new("mail.sch.gr", open_timeout: 5)
     imap.authenticate("LOGIN", CHECK_QUOTA_USERNAME, CHECK_QUOTA_PASSWORD)
     a = imap.getquotaroot("INBOX")
     usage = a[1]["usage"]
