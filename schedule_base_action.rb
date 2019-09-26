@@ -14,8 +14,8 @@ class ScheduleBaseAction < Dummy_Action
     return STOP_PROCESSING if first_pass == STOP_PROCESSING 
 
     @fromSchedulers = SCHEDULERS.map{ |s| @sender.include?( s )}.include?(true)
-    @aboutSchedule = ( @subject =~ /.*ρολ.γιο.*ρ.γραμ.*/ )
-    @aboutEfimeries = ( @subject =~ /.*φημερ.ε.*/ )
+    @aboutSchedule = ( @subject =~ /.*ρολ.γιο.*ρ.γραμ.*/i )
+    @aboutEfimeries = ( @subject =~ /.*φημερ.ε.*/i )
 
     find_required_schedule_files(m)
     p @foundScheduleFiles
