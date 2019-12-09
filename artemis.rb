@@ -103,8 +103,20 @@ class Artemis
     puts "Starting one time actions"
     @one_time_actions.each do |a|
       begin
-        result = a.execute()
-        puts "--- #{a.describe} return #{result}"
+	thread = Thread.new {
+		result = a.execute()
+		puts "--- #{a.describe} return #{result}"
+	}
+	wait_cycles = 0
+	#join returns nil when timeout occurs
+	while thread.join( 60*5 ) == nil and wait_cycles < 3 
+		wait_cycles += 1
+		puts "Still #{wait_cycles} waiting thread to finish ..."
+	end
+	if wait_cycles == 3
+		puts "Timeout while waiting thread to finish..."
+		exit	
+	end
       rescue => e
         p e
         puts e
