@@ -10,6 +10,7 @@ load "forbidden"
 #one time actions
 load "basic_one_time_action.rb"
 load "check_quota.rb"
+load "check_for_nonforwardable.rb"
 load "check_free_mem.rb"
 load "check_free_disk.rb"
 
@@ -55,6 +56,7 @@ class Artemis
     #Then the email processing follows
     @one_time_actions = []
     @one_time_actions << CheckQuota.new
+    @one_time_actions << CheckForNonForwardable.new
     @one_time_actions << CheckFreeMem.new
     @one_time_actions << CheckFreeDisk.new
 
