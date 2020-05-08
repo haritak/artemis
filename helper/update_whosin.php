@@ -31,14 +31,19 @@ for ($row = 1; $row <= $highestRow; ++$row) {
   if ($cell>""){
     $name = $cell;
     $name = str_replace("/","_",$name);
+    echo $name;
+    echo "\n";
     /* if this is a new name, insert it! */
     $sql = "SELECT * from teachers WHERE timetables_name LIKE '%" . $name . "%'";
     $ret = $handle->query($sql);
     if ($ret->fetchArray(SQLITE3_ASSOC) == FALSE) {
+      echo "New name!\n";
       /* this is a new name, go on and insert it to whosin.db */
       $sql = "INSERT INTO teachers VALUES(NULL, '".$name."',0,1)";
       $op = $handle->prepare($sql);
       $op->execute();
+    } else {
+      echo "pre-existing name\n";
     }
   }
 }

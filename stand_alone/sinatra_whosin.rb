@@ -15,6 +15,7 @@ def refreshAllTeachers(db, allTeachers)
   while row
     #0:id, 1:name, 2:using_groups, 3:driver
     allTeachers[ row[0] ] = [ row[1], row[2], row[3] ]
+    p row
     row = rs.next
   end
 end
