@@ -35,7 +35,7 @@ class CheckForNonForwardable < BasicOneTimeAction
             p m.subject
             msg += m.subject + "<br>\n"
             p m.from
-            msg += m.from + "<br>\n"
+            msg += m.from.to_s + "<br>\n"
             msg += "<br><br>\n\n\n"
         end
 	Artemis::send_alert_email(SENSITIVE_EMAIL_RECIPIENTS, "Υπάρχουν #{emails.size} που δεν προωθούνται αυτόματα.<br><br>\n\n"+msg)

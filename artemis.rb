@@ -203,6 +203,7 @@ class Artemis
       if attachments
         attachments.each do |f|
           add_file f
+          puts "Attaching file #{f}"
         end
       end
       now = DateTime.now

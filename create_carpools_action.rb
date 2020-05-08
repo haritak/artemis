@@ -48,12 +48,12 @@ class CreateCarPoolsAction < ScheduleBaseAction
     groupfixer_versions.each_with_index do |dir,i|
       i+=1
       puts "External script " + i.to_s
-      %x{ cd #{dir} && php groupfixer.php #{whosin_filename} #{xls_filename} > #{target_base}/READY#{dir[-2..-1]}.xls  }
+      %x{ cd #{dir} && php groupfixer.php #{whosin_filename} #{xls_filename} > #{target_base}/READY#{dir[dir.index("_")..-1]}.xls  }
     end
     puts "--------------------------------------------"
     puts "External script finished."
 
-    results = Dir[ "#{target_base}/READY_*.xls" ]
+    results = Dir[ "#{target_base}/READY*.xls" ]
     msg = "<p><em>"+
       "Τα αρχεία των groups δημιουργήθηκαν επιτυχώς.</em></p>"+
       "<p>Μπορείτε να ρυθμίσετε ποιοί/ες συμμετέχουν στα groups"+
