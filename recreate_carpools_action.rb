@@ -35,6 +35,9 @@ class ReCreateCarPoolsAction < Dummy_Action
 
     groupfixer_versions = Dir[ groupfixer_base_dir + "/groupfixer_*" ]
 
+    puts "Updating group members"
+    %x{ cd helper && php update_whosin.php #{xls_filename} }
+
     puts "Calling external script. Its output follows."
     puts "--------------------------------------------"
     groupfixer_versions.each_with_index do |dir,i|

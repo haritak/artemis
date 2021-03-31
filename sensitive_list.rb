@@ -18,8 +18,8 @@ class MonitorSensitiveList < Dummy_Action
 
     isSensitive = false
 
-    isSensitive = true if @sender.include?(SENSITIVELIST)
-    isSensitive = true if @subject =~ /ΕΠΑΛ Ευαίσθητο/
+    #isSensitive = true if @sender.include?(SENSITIVELIST) TODO: Remove it ... 
+    isSensitive = true if @subject =~ /^\[ΕΠΑΛ Ευαίσθητο/
 
     return CONTINUE if not isSensitive
 
